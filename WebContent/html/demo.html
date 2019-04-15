@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery.1.9.1.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+$("#getInfo").click(function(){
+	$.ajax({
+	url:"userInfo",
+	success:function(result){
+	12
+
+	alert(result);
+	var user = result;
+	$("#account").text(user.account);
+	$("#pass").text(user.pass);
+	}
+	}
+	);
+</script>
+</body>
+</html>

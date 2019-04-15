@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="xxx" extends="struts-default,json-default">
+
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="success" type="json">
+				<param name="root">Books</param>
+			</result>
+			<result name="users" type="json">
+				<param name="root">borrow</param>
+			</result>
+			<result name="show" type="json">
+				<param name="root">bookinfo</param>
+			</result>
+			<result name="go" type="redirect">jsp/showbook.jsp?uno=${user.account}
+			</result>
+			<result name="input">jsp/login.jsp</result>
+			<result name="goo" type="redirect">jsp/showbook.jsp?uno=${param.uno}
+			</result>
+		</action>
+
+
+	</package>
+</struts>

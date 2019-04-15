@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/library?useUnicode=true&amp;characterEncoding=utf-8">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+	</bean>
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 要扫描哪个包 -->
+		<property name="basePackage" value="com.library.book.dao"></property>
+		<!-- 和factory产生关系:通过factory创建session、mapper -->
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+	<bean id="daoImpl" class="com.library.book.dao.impl.DAOImpl">
+		<!-- ref：通过扫描包自动生成的 -->
+		<property name="dao" ref="DAO"></property>
+	</bean>
+	<bean id="bookService"
+		class="com.library.book.service.BookService">
+		<property name="daoImpl" ref="daoImpl"></property>
+	</bean>
+
+	<bean id="userAction" class="com.library.action.UserAction"
+		scope="prototype">
+		<property name="bookService" ref="bookService"></property>
+	</bean>
+
+	<aop:config>
+		<aop:pointcut
+			expression="execution(* com.library.book.service.*.*(..))" id="pt" />
+		<!-- 将事务与方法关联起来 -->
+		<aop:advisor advice-ref="txAdivice" pointcut-ref="pt" />
+	</aop:config>
+	<tx:advice id="txAdivice" transaction-manager="txManager">
+
+		<tx:attributes>
+
+			<tx:method name="*" />
+
+		</tx:attributes>
+
+	</tx:advice>
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 配置数据源：对哪个数据库的管理 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+</beans>

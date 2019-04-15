@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery.1.9.1.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#btn").click(function(){
+			$.ajax({
+				url:"book_show",
+				success:function(data){
+					var books = data.books;
+					var table = $("<table></table>");
+					for (var i = 0; i < books.length; i++) {
+						var book = books[i];
+						var tr = $("<tr></tr>");
+						var bid = $("<td></td>").text(book.bid);
+						var bname = $("<td></td>").text(book.bname);
+						var author = $("<td></td>").text(book.author);
+						var count = $("<td></td>").text(book.count); 
+						tr.append(bid);
+						tr.append(bname);
+						tr.append(author);
+						tr.append(count); 
+						table.append(tr);
+					 } 
+					$("body").append(table); 
+				}
+			});
+		});
+	});
+	
+	$(document).ready(function() {
+		$("#add").click(function() {
+			$.ajax({
+				url:"book_findBook",
+				data:{
+					"book.bname":$("#bname").val()
+				},
+				type:"post",
+				success:function(data){
+					alert("rnm");
+				},
+				
+			})
+		})
+	})
+	
+</script>
+</head>
+<body>
+	<form action="user_login" method="POST">
+		账号：<input type="text" name="user.username" /><br>
+		密码：<input type="password" name="user.pass" /><br>
+		<input type="submit" value="登录"/>
+	</form>	
+	<hr>
+	<button id="btn">展示所有书籍</button>
+	<hr>
+	<div class="form-group">
+						<label for="username" class="col-sm-2 control-label">书名</label>
+						<div class="col-sm-6">
+							<input id="bname">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-2 control-label">密码</label> 
+						<div class="col-sm-6">
+							<input name="book.pass">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="confirmpwd" class="col-sm-2 control-label">作者</label>
+						<div class="col-sm-6">
+							<input name="book.user">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-6">
+							<input name="book.">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="usercaption" class="col-sm-2 control-label">姓名</label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" id="usercaption" name="name"
+								placeholder="请输入姓名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="date" class="col-sm-2 control-label">出生日期</label>
+						<div class="col-sm-6">
+							<input type="date" class="form-control" name="birthday">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="date" class="col-sm-2 control-label">验证码</label>
+						<div class="col-sm-3">
+							<input type="text" class="form-control" name="checkCode" id="pic">
+
+						</div>
+						<div class="col-sm-2">
+							<img src="/Shop/pic" id="picture" onclick="getPic()"/>
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<div class="alert alert-danger" style="background-color: white;border: 0;height: 60px" id="msg">
+					
+						</div>
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="button" class="btn btn-danger" style="width: 100px"
+								id="add">添加</button>
+						</div>
+					</div>
+</body>
+</html>
